@@ -1,5 +1,18 @@
 import schedule
 
+
+def decoException(func):
+    def wrapper(fib):
+        if(not isinstance(fib, Fib)):
+            print("Проверьте данные которые передаются в генератор там должен быть обьект класса fib")
+            return None
+        from time import time
+        time_now = time()
+        gen = func(fib)
+        print(f"время cоздания генератора: {time_now - time()}")
+        return gen
+    return wrapper
+
 class Fib:
     '''итераток который возврашает числа фиббоначчи'''
 
@@ -18,17 +31,6 @@ class Fib:
         self.a, self.b = self.b, self.a + self.b
         return fib
 
-def decoException(func):
-    def wrapper(fib):
-        if(not isinstance(fib, Fib)):
-            print("Проверьте данные которые передаются в генератор там должен быть обьект класса fib")
-            return None
-        from time import time
-        time_now = time()
-        gen = func(fib)
-        print(f"время cоздания генератора: {time_now - time()}")
-        return gen
-    return wrapper
 @decoException
 def fib_gen(fib):
     '''Генератор который возврашает числа фиббоначи благодаря классу итератору'''
