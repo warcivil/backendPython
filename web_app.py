@@ -1,6 +1,8 @@
 from json import dumps
 import requests
 from settings import USERNAME, TOKEN
+
+
 class app(object):
     '''WSGI приложение'''
 
@@ -82,7 +84,7 @@ class app(object):
 
     def bugs_info(self):
         ''' немного логики при обращении к /bugs '''
-        
+
         if(self.environ['QUERY_STRING'] == "123456"):
             self.create_response("418 I'm teapot", "application/json")
             answer = self.create_answer(
@@ -93,6 +95,7 @@ class app(object):
             answer = self.create_answer(
                 "406 Not Acceptable", "GET", self.environ["PATH_INFO"])
             return f"{answer}".encode("utf-8")
+
     def repos_content(self):
         ''' генерируем инфу о репозиториях в формате json '''
 
@@ -102,15 +105,15 @@ class app(object):
         for item in response.json():
             answer.append(
                 {
-                    "reposity name":item["full_name"],
-                    "html url":item["html_url"],
-                    "visibility":"private" if item["private"] else "public",
-                    "subscribers count":item["watchers_count"],
-                    "size":item["size"],
+                    "reposity name": item["full_name"],
+                    "html url": item["html_url"],
+                    "visibility": "private" if item["private"] else "public",
+                    "subscribers count": item["watchers_count"],
+                    "size": item["size"],
                 }
             )
         return f"{dumps(answer)}".encode("utf-8")
-        
+
     def create_session(self):
         ''' создаем сессию '''
 
