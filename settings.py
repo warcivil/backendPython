@@ -1,0 +1,2 @@
+TOKEN = "xxxxxxxxx"
+USERNAME = "warcivil"
