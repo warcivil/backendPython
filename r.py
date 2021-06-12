@@ -1,4 +1,9 @@
 import requests
+from settings import TOKEN, USERNAME
+from pprint import pprint
 
-r = requests.delete('http://localhost:8082/index', data={'a': 'b'})
-print(r.text)
+with requests.Session() as session:
+    session.auth = (USERNAME, TOKEN)
+    response = session.get('https://api.github.com/user/repos')
+
+pprint(response.json())
