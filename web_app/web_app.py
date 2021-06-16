@@ -1,7 +1,5 @@
 from json import dumps
-import requests
-from settings import USERNAME, TOKEN
-
+from git_module import GitModule
 
 class app(object):
     '''WSGI приложение'''
@@ -54,7 +52,9 @@ class app(object):
     def get(self):
         '''GET ответ'''
         if(self.environ["PATH_INFO"] == "/repos"):
-            return self.repos_content()
+            git_module_work = GitModule('https://api.github.com/user/repos')
+            self.create_response("200 OK", "application/json")
+            return git_module_work.repos_content()
         if(self.environ["PATH_INFO"] == "/content"):
             return f"{self.environ}".encode("utf-8")
         elif(self.environ["PATH_INFO"] == "/bugs"):
@@ -95,28 +95,3 @@ class app(object):
             answer = self.create_answer(
                 "406 Not Acceptable", "GET", self.environ["PATH_INFO"])
             return f"{answer}".encode("utf-8")
-
-    def repos_content(self):
-        ''' генерируем инфу о репозиториях в формате json '''
-
-        answer = []
-        response = self.create_session()
-        self.create_response("200 OK", "application/json")
-        for item in response.json():
-            answer.append(
-                {
-                    "reposity name": item["full_name"],
-                    "html url": item["html_url"],
-                    "visibility": "private" if item["private"] else "public",
-                    "subscribers count": item["watchers_count"],
-                    "size": item["size"],
-                }
-            )
-        return f"{dumps(answer)}".encode("utf-8")
-
-    def create_session(self):
-        ''' создаем сессию '''
-
-        with requests.Session() as session:
-            session.auth = (USERNAME, TOKEN)
-            return session.get('https://api.github.com/user/repos')
