@@ -15,7 +15,7 @@ class Car(Base):
     def __str__(self):
         return Base.__str__(self)
 
-
 if __name__ == '__main__':
     car = Car("honda", 120)
     print(car)
+
